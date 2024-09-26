@@ -184,13 +184,13 @@ var _ = ginkgo.Describe("Seamless migration and rollback testing", func() {
 
 			ginkgo.DeferCleanup(func() {
 				// Delete ClusterRole in member cluster
-				framework.RemoveClusterRole(member1Client, clusterRoleName)
+				framework.RemoveClusterRole(member1Client, clusterRole.Name)
 				// Delete ClusterPropagationPolicy in karmada control plane
 				framework.RemoveClusterPropagationPolicy(karmadaClient, cpp.Name)
 
 				// Verify ClusterRole in member cluster will be deleted automatically after promotion since it has been deleted from Karmada
 				klog.Infof("Waiting for ClusterRole deleted from cluster(%s)", member1)
-				framework.WaitClusterRoleDisappearOnCluster(member1, clusterRoleName)
+				framework.WaitClusterRoleDisappearOnCluster(member1, clusterRole.Name)
 			})
 		})
 
