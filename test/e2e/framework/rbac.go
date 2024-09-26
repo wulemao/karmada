@@ -18,6 +18,7 @@ package framework
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/onsi/ginkgo/v2"
@@ -161,8 +162,10 @@ func WaitClusterRoleDisappearOnCluster(cluster, name string) {
 
 	klog.Infof("Waiting for clusterRole(%s) disappear on cluster(%s)", name, cluster)
 	gomega.Eventually(func() bool {
-		_, err := clusterClient.RbacV1().ClusterRoles().Get(context.TODO(), name, metav1.GetOptions{})
+		obj, err := clusterClient.RbacV1().ClusterRoles().Get(context.TODO(), name, metav1.GetOptions{})
 		if err == nil {
+			buf, _ := json.Marshal(obj)
+			klog.Infof("clusterrole %s in cluster %s", buf, cluster)
 			return false
 		}
 		if apierrors.IsNotFound(err) {
