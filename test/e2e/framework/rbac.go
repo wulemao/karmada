@@ -116,6 +116,7 @@ func RemoveClusterRole(client kubernetes.Interface, name string) {
 	ginkgo.By(fmt.Sprintf("Remove ClusterRole(%s)", name), func() {
 		err := client.RbacV1().ClusterRoles().Delete(context.TODO(), name, metav1.DeleteOptions{})
 		if apierrors.IsNotFound(err) {
+			klog.Infof("not found, maybe already deleted")
 			return
 		}
 		gomega.Expect(err).ShouldNot(gomega.HaveOccurred())
